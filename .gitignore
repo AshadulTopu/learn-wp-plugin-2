@@ -13,6 +13,10 @@
 !wp-content/plugins/wpplugin/**
 !wp-content/plugins/wpplugin.zip
 
+!wp-content/plugins/first-plugin-start
+!wp-content/plugins/first-plugin-start/**
+!wp-content/plugins/first-plugin-start.zip
+
 # allow uploads directory
 !wp-content/uploads/
 # Allow specific files in the root directory
