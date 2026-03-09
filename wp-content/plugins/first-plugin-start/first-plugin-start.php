@@ -16,6 +16,13 @@
  */
 
 
+// consent
+define('MY_BASICS_PLUGIN_VERSION', '1.0.1');
+define('FIRST_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('FIRST_PLUGIN_PATH', plugin_dir_path(__FILE__));
+
+
+// menu / hook
 add_action('admin_menu', 'my_basics_plugin_menu');
 
 function my_basics_plugin_menu()
@@ -47,5 +54,5 @@ function my_basics_plugin_page()
 
 function my_basics_plugin_settings_page()
 {
-    echo '<div class="wrap"><h1>My Basics Plugin Settings</h1><p>Here you can configure the settings for My Basics Plugin.</p></div>';
+    require_once FIRST_PLUGIN_PATH . 'views/settings.php';
 }
