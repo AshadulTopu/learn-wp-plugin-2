@@ -1,0 +1,32 @@
+# Ignore everything
+*
+.github/
+.git/
+# Allow only the wp-content directory
+!.gitignore
+!wp-content/
+
+# Allow specific subdirectories inside wp-content
+
+!wp-content/plugins/
+!wp-content/plugins/wpplugin
+!wp-content/plugins/wpplugin/**
+!wp-content/plugins/wpplugin.zip
+
+# allow uploads directory
+!wp-content/uploads/
+# Allow specific files in the root directory
+!wp-content/uploads/**
+
+!documentation/
+!documentation/**
+
+!landing/
+!landing/**
+
+!source/
+!source/**
+
+# allow sql file for database. if you want to use it.
+# database.sql
+!wp-content/wpplugin.sql
