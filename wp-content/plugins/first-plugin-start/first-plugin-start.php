@@ -17,8 +17,9 @@
 
 
 // consent
-define('MY_BASICS_PLUGIN_VERSION', '1.0.1');
+define('FIRST_PLUGIN_VERSION', '1.0.1');
 define('FIRST_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('FIRST_PLUGIN_ASSETS', plugin_dir_url(__FILE__) . 'assets/');
 define('FIRST_PLUGIN_PATH', plugin_dir_path(__FILE__));
 
 
@@ -56,3 +57,7 @@ function my_basics_plugin_settings_page()
 {
     require_once FIRST_PLUGIN_PATH . 'views/settings.php';
 }
+
+
+// enqueue scripts and styles
+require_once FIRST_PLUGIN_PATH . 'include/enqueue-script.php';

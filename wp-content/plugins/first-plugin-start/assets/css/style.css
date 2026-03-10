@@ -1,0 +1,22 @@
+/* 
+* @author Ashadul Islam
+* @version 1.0.0
+* @package First Plugin Start
+* @since 1.0.0
+*/
+
+.first-plugin-start-wrapper {
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 5px;
+}
+.first-plugin-start-wrapper h1,
+.first-plugin-start-wrapper h2,
+.first-plugin-start-wrapper h3 {
+  color: red;
+  margin-bottom: 15px;
+}
+.first-plugin-start-wrapper p {
+  color: #555;
+  line-height: 1.6;
+}
