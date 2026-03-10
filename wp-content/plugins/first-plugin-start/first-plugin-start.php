@@ -53,6 +53,8 @@ function my_basics_plugin_page()
     echo '<div class="wrap"><h1>Welcome to My Basics Plugin</h1><p>This is the main page of the plugin.</p></div>';
 }
 
+
+// page include
 function my_basics_plugin_settings_page()
 {
     require_once FIRST_PLUGIN_PATH . 'views/settings.php';
@@ -61,3 +63,21 @@ function my_basics_plugin_settings_page()
 
 // enqueue scripts and styles
 require_once FIRST_PLUGIN_PATH . 'include/enqueue-script.php';
+
+
+// admin bar
+function my_admin_bar_menu_func()
+{
+    global $wp_admin_bar;
+    $wp_admin_bar->add_menu(array(
+        'id' => 'my_admin_bar_menu',
+        'title' => 'My Admin Bar Menu',
+        'href' => '#',
+        'meta' => array(
+            'title' => 'Ashadul Islam', // This is the tooltip text
+            'target' => '_blank',
+            'class' => 'my-custom-class',
+        ),
+    ));
+}
+add_action('admin_bar_menu', 'my_admin_bar_menu_func', 999);
