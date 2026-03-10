@@ -181,3 +181,21 @@ function my_custom_post_type_func()
     );
 }
 add_action('init', 'my_custom_post_type_func');
+
+
+// modify custom post type admin columns
+function my_custom_post_type_columns_func($columns)
+{
+    $columns['cb'] = '<input type="checkbox" />';
+    $columns['title'] = __('Title');
+    $columns['date'] = __('Date');
+    $columns['publisher'] = __('Publisher');
+    $columns['author'] = __('Author');
+    $columns['categories'] = __('Categories');
+    $columns['tags'] = __('Tags');
+
+    unset($columns['comments']); // remove comments column
+
+    return $columns;
+}
+add_filter('manage_my_custom_post_type_posts_columns', 'my_custom_post_type_columns_func');
