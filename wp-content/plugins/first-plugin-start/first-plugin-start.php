@@ -162,3 +162,22 @@ function my_show_meta_in_frontend_func($content)
 }
 // add_filter('the_content', 'my_show_meta_in_frontend_func'); // show meta value in frontend within the content
 add_filter('the_title', 'my_show_meta_in_frontend_func'); // show meta value in frontend within the title
+
+
+
+// custom post type
+function my_custom_post_type_func()
+{
+    register_post_type(
+        'my_custom_post_type',
+        array(
+            'labels' => array(
+                'name' => __('My Custom Post Types'),
+                'singular_name' => __('My Custom Post Type')
+            ),
+            'public' => true,
+            'has_archive' => true,
+        )
+    );
+}
+add_action('init', 'my_custom_post_type_func');
