@@ -327,3 +327,33 @@ function my_custom_post_type_meta_box_save_func($post_id)
     }
 }
 add_action('save_post_my_custom_post_type', 'my_custom_post_type_meta_box_save_func');
+
+
+
+
+
+
+
+
+
+
+
+// shortcode
+function my_shortcode_func()
+{
+    return 'Hello, this is a shortcode! <br>';
+}
+add_shortcode('my_shortcode', 'my_shortcode_func');
+
+// dynamic shortcode with attributes
+function my_dynamic_shortcode_func($atts)
+{
+    $name = $atts['name'];
+    return 'Hello, ' . $name . '! <br>';
+}
+add_shortcode('my_dynamic_shortcode', 'my_dynamic_shortcode_func');
+
+
+
+
+
