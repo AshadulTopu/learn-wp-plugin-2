@@ -146,4 +146,19 @@ function my_meta_box_save_func($post_id)
         update_post_meta($post_id, 'my_meta_box_field', sanitize_text_field($_POST['my_meta_box_field']));
     }
 }
-add_action('save_post', 'my_meta_box_save_func'); 
+add_action('save_post', 'my_meta_box_save_func');
+
+// show meta value in frontend
+function my_show_meta_in_frontend_func($content)
+{
+    if (is_single()) {
+        global $post;
+        $meta_value = get_post_meta($post->ID, 'my_meta_box_field', true);
+        if (!empty($meta_value)) {
+            $content .= '<p>Meta Value: ' . esc_html($meta_value) . '</p>';
+        }
+    }
+    return $content;
+}
+// add_filter('the_content', 'my_show_meta_in_frontend_func'); // show meta value in frontend within the content
+add_filter('the_title', 'my_show_meta_in_frontend_func'); // show meta value in frontend within the title

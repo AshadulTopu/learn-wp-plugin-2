@@ -18,4 +18,4 @@ function first_plugin_start_enqueue_scripts()
 }
 // add_action('wp_enqueue_scripts', 'first_plugin_start_enqueue_scripts'); // Enqueue admin scripts and styles for frontend only
 // add_action('admin_enqueue_scripts', 'first_plugin_start_enqueue_scripts'); // Enqueue admin scripts and styles for admin area only
-add_action('init', 'first_plugin_start_enqueue_scripts');   // Enqueue admin scripts and styles for frontend and admin both areas
+add_action('init', 'first_plugin_start_enqueue_scripts');   // Enqueue admin scripts and styles for frontend and admin both areas 
