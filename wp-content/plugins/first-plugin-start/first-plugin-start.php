@@ -354,6 +354,19 @@ function my_dynamic_shortcode_func($atts)
 add_shortcode('my_dynamic_shortcode', 'my_dynamic_shortcode_func');
 
 
+// shortcode with default attribute value
+function my_default_shortcode_func($atts)
+{
+    $atts = shortcode_atts(
+        array(
+            'name' => 'Topu',
+            'email' => 'topu@example.com',
+            'phone' => '1234567890',
+        ),
+        $atts,
+        'my_default_shortcode'
+    );
 
-
-
+    return 'Hello, ' . $atts['name'] . '! <br>';
+}
+add_shortcode('my_default_shortcode', 'my_default_shortcode_func');
