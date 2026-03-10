@@ -117,3 +117,33 @@ function my_admin_notices_func()
     echo '<div class="notice notice-success is-dismissible"><p>My Notice</p></div>';
 }
 add_action('admin_notices', 'my_admin_notices_func');
+
+
+// meta box
+function my_meta_box_func()
+{
+    add_meta_box(
+        'my_meta_box_id',
+        'My Meta Box',
+        'my_meta_box_callback',
+        'post',
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'my_meta_box_func');
+
+function my_meta_box_callback($post)
+{
+    echo '<input type="text" name="my_meta_box_field" value="' . get_post_meta($post->ID, 'my_meta_box_field', true) . '">';
+}
+
+
+// save meta box
+function my_meta_box_save_func($post_id)
+{
+    if (isset($_POST['my_meta_box_field'])) {
+        update_post_meta($post_id, 'my_meta_box_field', sanitize_text_field($_POST['my_meta_box_field']));
+    }
+}
+add_action('save_post', 'my_meta_box_save_func'); 
