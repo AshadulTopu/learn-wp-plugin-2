@@ -1,0 +1,22 @@
+/* 
+* @author Ashadul Islam
+* @version 1.0.0
+* @package wpplugin
+* @since 1.0.0
+*/
+
+.wpplugin-wrapper {
+  background: #f1f1f1;
+  padding: 20px;
+  border-radius: 5px;
+}
+.wpplugin-wrapper h1,
+.wpplugin-wrapper h2,
+.wpplugin-wrapper h3 {
+  color: blue;
+  margin-bottom: 15px;
+}
+.wpplugin-wrapper p {
+  color: #555;
+  line-height: 1.6;
+}

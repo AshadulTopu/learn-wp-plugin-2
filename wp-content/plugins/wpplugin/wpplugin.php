@@ -33,6 +33,18 @@ class Wpplugin
     public function __construct()
     {
         add_action('admin_menu', array($this, 'wpplugin_menu'));
+        add_action('admin_bar_menu', array($this, 'wpplugin_admin_bar_menu_func'), 999);
+
+        add_action('add_meta_boxes', array($this, 'wpplug_meta_box_func')); // add meta box
+        add_action('save_post', array($this, 'wpplugin_meta_box_save_func')); // save meta box data
+        add_filter('the_content', array($this, 'wpplugin_show_meta_in_frontend_func')); // show meta value in frontend within the content
+        // add_filter('the_title', array($this, 'wpplugin_show_meta_in_frontend_func')); // show meta value in frontend within the title
+
+
+
+        add_action('init', array($this, 'wpplugin_custom_post_type_func'));
+
+        // require_once WPPLUGIN_PLUGIN_PATH . 'include/enqueue-script.php';
     }
 
     public function wpplugin_menu()
@@ -69,6 +81,108 @@ class Wpplugin
     {
         require_once WPPLUGIN_PLUGIN_PATH . 'views/settings.php';
     }
+
+    // load script file
+    // public function load_script()
+    // {
+    //     // enqueue scripts and styles
+    //     require_once WPPLUGIN_PLUGIN_PATH . 'include/enqueue-script.php';
+    // }
+
+
+
+
+    // admin bar
+    public function wpplugin_admin_bar_menu_func()
+    {
+        global $wp_admin_bar;
+        // Add a new menu item to the admin bar
+        $wp_admin_bar->add_menu(array(
+            'id' => 'wpplug_admin_bar_menu',
+            'title' => 'wpplugin',
+            'href' => '#',
+            'meta' => array(
+                'title' => 'Ashadul Islam', // This is the tooltip text
+                'target' => '_blank',
+                'class' => 'my-custom-class',
+            ),
+        ));
+
+        // Add a submenu item to the admin bar
+        $wp_admin_bar->add_menu(array(
+            'parent' => 'wpplug_admin_bar_menu',
+            'id' => 'wpplugin_admin_bar_submenu',
+            'title' => 'Admin Bar Submenu',
+            'href' => '#',
+            'meta' => array(
+                'title' => 'This is the submenu', // This is the tooltip text
+                'target' => '_blank',
+                'class' => 'my-custom-class',
+            ),
+        ));
+    }
+
+    // meta box
+    public function wpplug_meta_box_func()
+    {
+        add_meta_box(
+            'wpplugin_meta_box_id',
+            'Test Meta Box',
+            array($this, 'wpplugin_meta_box_callback'),  // Use array notation
+            'post',
+            'side',
+            'high'
+        );
+    }
+
+    public function wpplugin_meta_box_callback($post)
+    {
+        ?>
+        <p>This is a test meta box added by WP Plugin.</p>
+        <input type="text" name="wpplugin_post_meta_field"
+            value="<?php echo get_post_meta($post->ID, 'wpplugin_post_meta_field', true); ?>">
+        <?php
+    }
+
+    // save meta box
+    public function wpplugin_meta_box_save_func($post_id)
+    {
+        if (isset($_POST['wpplugin_post_meta_field'])) {
+            update_post_meta($post_id, 'wpplugin_post_meta_field', sanitize_text_field($_POST['wpplugin_post_meta_field']));
+        }
+    }
+
+    // show meta value in frontend
+    public function wpplugin_show_meta_in_frontend_func($content)
+    {
+        if (is_single()) {
+            global $post;
+            $meta_value = get_post_meta($post->ID, 'wpplugin_post_meta_field', true);
+            if (!empty($meta_value)) {
+                $content .= '<p>Meta Value: ' . esc_html($meta_value) . '</p>';
+            }
+        }
+        return $content;
+    }
+
+
+
+    // custom post type
+    public function wpplugin_custom_post_type_func()
+    {
+        register_post_type(
+            'wpplugin_post_type',
+            array(
+                'labels' => array(
+                    'name' => __('wpplugin Post Types'),
+                    'singular_name' => __('wpplugin Post Type')
+                ),
+                'public' => true,
+                'has_archive' => true,
+            )
+        );
+    }
+
 }
 
 

@@ -127,7 +127,7 @@ function my_admin_notices_func()
 {
     echo '<div class="notice notice-success is-dismissible"><p>My Notice</p></div>';
 }
-add_action('admin_notices', 'my_admin_notices_func');
+// add_action('admin_notices', 'my_admin_notices_func');
 
 
 
