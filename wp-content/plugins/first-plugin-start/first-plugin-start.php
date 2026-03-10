@@ -111,12 +111,34 @@ add_action('admin_bar_menu', 'my_admin_bar_menu_func', 999);
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // admin notice
 function my_admin_notices_func()
 {
     echo '<div class="notice notice-success is-dismissible"><p>My Notice</p></div>';
 }
 add_action('admin_notices', 'my_admin_notices_func');
+
+
+
+
+
+
+
+
+
+
+
 
 
 // meta box
@@ -165,6 +187,12 @@ add_filter('the_title', 'my_show_meta_in_frontend_func'); // show meta value in 
 
 
 
+
+
+
+
+
+
 // custom post type
 function my_custom_post_type_func()
 {
@@ -187,8 +215,9 @@ add_action('init', 'my_custom_post_type_func');
 function my_custom_post_type_columns_func($columns)
 {
     $columns['cb'] = '<input type="checkbox" />';
-    $columns['title'] = __('Title');
     $columns['date'] = __('Date');
+    $columns['title'] = __('Title');
+    $columns['content'] = __('Content');
     $columns['publisher'] = __('Publisher');
     $columns['author'] = __('Author');
     // $columns['categories'] = __('Categories');
@@ -208,6 +237,9 @@ add_filter('manage_my_custom_post_type_posts_columns', 'my_custom_post_type_colu
 function my_custom_post_type_column_content_func($column_name, $post_id)
 {
     switch ($column_name) {
+        case 'content':
+            echo wp_trim_words(get_post_field('post_content', $post_id), 20, '...'); // show only first 20 words of content
+            break;
         case 'publisher':
             echo get_the_author();
             break;
@@ -229,3 +261,69 @@ function my_custom_post_type_column_content_func($column_name, $post_id)
     }
 }
 add_action('manage_my_custom_post_type_posts_custom_column', 'my_custom_post_type_column_content_func', 10, 2);
+
+
+// meta box for custom post type
+function my_custom_post_type_meta_box_func()
+{
+    add_meta_box(
+        'amount_meta_box_id',
+        'Amount',
+        'my_amount_meta_box_callback',
+        'my_custom_post_type',
+        'side',
+        'high'
+    );
+    add_meta_box(
+        'price_meta_box_id',
+        'Price',
+        'my_price_meta_box_callback',
+        'my_custom_post_type',
+        'side',
+        'high'
+    );
+    add_meta_box(
+        'status_meta_box_id',
+        'Status',
+        'my_status_meta_box_callback',
+        'my_custom_post_type',
+        'side',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'my_custom_post_type_meta_box_func');
+
+function my_amount_meta_box_callback($post)
+{
+    echo '<input type="text" name="amount" value="' . get_post_meta($post->ID, 'amount', true) . '">';
+}
+
+function my_price_meta_box_callback($post)
+{
+    echo '<input type="text" name="price" value="' . get_post_meta($post->ID, 'price', true) . '">';
+}
+
+function my_status_meta_box_callback($post)
+{
+    echo '<input type="text" name="status" value="' . get_post_meta($post->ID, 'status', true) . '">';
+}
+
+// save meta box values
+function my_custom_post_type_meta_box_save_func($post_id)
+{
+    // Save amount
+    if (isset($_POST['amount'])) {
+        update_post_meta($post_id, 'amount', sanitize_text_field($_POST['amount']));
+    }
+
+    // Save price
+    if (isset($_POST['price'])) {
+        update_post_meta($post_id, 'price', sanitize_text_field($_POST['price']));
+    }
+
+    // Save status
+    if (isset($_POST['status'])) {
+        update_post_meta($post_id, 'status', sanitize_text_field($_POST['status']));
+    }
+}
+add_action('save_post_my_custom_post_type', 'my_custom_post_type_meta_box_save_func');
