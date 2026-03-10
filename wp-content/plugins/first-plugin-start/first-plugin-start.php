@@ -69,6 +69,7 @@ require_once FIRST_PLUGIN_PATH . 'include/enqueue-script.php';
 function my_admin_bar_menu_func()
 {
     global $wp_admin_bar;
+    // Add a new menu item to the admin bar
     $wp_admin_bar->add_menu(array(
         'id' => 'my_admin_bar_menu',
         'title' => 'My Admin Bar Menu',
@@ -79,5 +80,31 @@ function my_admin_bar_menu_func()
             'class' => 'my-custom-class',
         ),
     ));
+
+    // Add a submenu item to the admin bar
+    $wp_admin_bar->add_menu(array(
+        'parent' => 'my_admin_bar_menu',
+        'id' => 'my_admin_bar_submenu',
+        'title' => 'My Admin Bar Submenu',
+        'href' => '#',
+        'meta' => array(
+            'title' => 'This is the submenu', // This is the tooltip text
+            'target' => '_blank',
+            'class' => 'my-custom-class',
+        ),
+    ));
+
+    $wp_admin_bar->add_menu(array(
+        'parent' => 'my_admin_bar_menu',
+        'id' => 'my_admin_bar_submenu_2',
+        'title' => 'My Admin Bar Submenu 2',
+        'href' => '#',
+        'meta' => array(
+            'title' => 'This is the submenu 2', // This is the tooltip text
+            'target' => '_blank',
+            'class' => 'my-custom-class',
+        ),
+    ));
+
 }
 add_action('admin_bar_menu', 'my_admin_bar_menu_func', 999);
