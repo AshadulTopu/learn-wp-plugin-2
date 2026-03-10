@@ -191,11 +191,41 @@ function my_custom_post_type_columns_func($columns)
     $columns['date'] = __('Date');
     $columns['publisher'] = __('Publisher');
     $columns['author'] = __('Author');
-    $columns['categories'] = __('Categories');
-    $columns['tags'] = __('Tags');
+    // $columns['categories'] = __('Categories');
+    // $columns['tags'] = __('Tags');
+    $columns['amount'] = __('Amount');
+    $columns['price'] = __('Price');
+    $columns['status'] = __('Status');
 
     unset($columns['comments']); // remove comments column
 
     return $columns;
 }
 add_filter('manage_my_custom_post_type_posts_columns', 'my_custom_post_type_columns_func');
+
+
+// modify custom post type admin column content
+function my_custom_post_type_column_content_func($column_name, $post_id)
+{
+    switch ($column_name) {
+        case 'publisher':
+            echo get_the_author();
+            break;
+        // case 'categories':
+        //     echo get_the_category_list(', ');
+        //     break;
+        // case 'tags':
+        //     echo get_the_tag_list('', ', ');
+        //     break;
+        case 'amount':
+            echo get_post_meta($post_id, 'amount', true);
+            break;
+        case 'price':
+            echo get_post_meta($post_id, 'price', true);
+            break;
+        case 'status':
+            echo get_post_meta($post_id, 'status', true);
+            break;
+    }
+}
+add_action('manage_my_custom_post_type_posts_custom_column', 'my_custom_post_type_column_content_func', 10, 2);
