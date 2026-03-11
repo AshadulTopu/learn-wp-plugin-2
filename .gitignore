@@ -17,6 +17,10 @@
 !wp-content/plugins/first-plugin-start/**
 !wp-content/plugins/first-plugin-start.zip
 
+!wp-content/plugins/post-count
+!wp-content/plugins/post-count/**
+!wp-content/plugins/post-count.zip
+
 # allow uploads directory
 !wp-content/uploads/
 # Allow specific files in the root directory
