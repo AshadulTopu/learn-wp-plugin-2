@@ -117,11 +117,12 @@ class ViewCountPlugin
     public function vcp_display_view_count($content)
     {
         if (is_single()) {
-            global $post;
 
             $show_views = get_option('vcp_view_count_enabled', 'yes');
 
             if ($show_views === 'yes') {
+
+                global $post;
                 $views = get_post_meta($post->ID, 'vcp_view_count', true);
                 $views = $views ? $views : 0;
                 return $content . '<p>Views: ' . $views . '</p>';
