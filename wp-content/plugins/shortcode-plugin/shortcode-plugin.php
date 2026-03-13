@@ -39,9 +39,16 @@ class ShortcodePlugin
 
         // pagination check
         // if ($atts['pagination'] == 'true') {
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+        // $paged = get_query_var('paged') ? get_query_var('paged') : 1;
         // $query_args['paged'] = $paged;
         // }
+
+        // For pages (not the blog index), use 'page' instead of 'paged':
+        if (is_page()) {
+            $paged = (get_query_var('page')) ? get_query_var('page') : 1;
+        } else {
+            $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+        }
 
 
         // This block of code creates a new WP_Query to fetch the recent posts based on the provided attributes. It checks if there are any posts returned by the query and generates an unordered list of post titles with links to the respective posts. If no posts are found, it returns a message indicating that no recent posts were found.
@@ -65,20 +72,47 @@ class ShortcodePlugin
             }
             $output .= '</ul>';
             // Pagination
+            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
+            //     $big = 999999999; // an unlikely integer
+            //     $output .= '<div class="pagination">';
+            //     $output .= paginate_links(array(
+            //         // 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+            //         'base' => add_query_arg('paged', '%#%'),
+            //         // 'format' => '?paged=%#%',
+            //         'format' => '',
+            //         // 'current' => max(1, get_query_var('paged')),
+            //         'current' => $paged,
+            //         'total' => $query->max_num_pages,
+            //     ));
+            //     $output .= '</div>';
+            // }
+
+            // // Pagination
+            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
+            //     $output .= '<div class="pagination">';
+            //     $output .= paginate_links(array(
+            //         'base' => add_query_arg('paged', '%#%', get_pagenum_link(1)),
+            //         'format' => '',
+            //         'current' => $paged,
+            //         'total' => $query->max_num_pages,
+            //         'type' => 'plain',
+            //     ));
+            //     $output .= '</div>';
+            // }
+
             if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
-                $big = 999999999; // an unlikely integer
+                $big = 999999999;
                 $output .= '<div class="pagination">';
                 $output .= paginate_links(array(
-                    // 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                    'base' => add_query_arg('paged', '%#%'),
-                    // 'format' => '?paged=%#%',
+                    'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
                     'format' => '',
-                    // 'current' => max(1, get_query_var('paged')),
                     'current' => $paged,
                     'total' => $query->max_num_pages,
+                    'type' => 'plain',
                 ));
                 $output .= '</div>';
             }
+
 
             wp_reset_postdata();
             return $output;
