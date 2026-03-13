@@ -14,7 +14,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-
 class ShortcodePlugin
 {
     public function __construct()
@@ -22,106 +21,65 @@ class ShortcodePlugin
         add_shortcode('recent_posts', array($this, 'recent_posts_shortcode'));
     }
 
-
-
-    // This function generates the output for the [recent_posts] shortcode, and it accepts attributes for the number of posts to display and the category to filter by.
     public function recent_posts_shortcode($atts)
     {
-
-        // This line sets default values for the shortcode attributes. If the user does not provide values for 'post_per_page' or 'category', it will default to 5 posts and no category filter.
+        // Set default attributes
         $atts = shortcode_atts(array(
             'post_per_page' => 5,
             'category' => '',
             'pagination' => false,
-
         ), $atts, 'recent_posts');
 
+        // Get current page
+        $paged = get_query_var('paged') ? get_query_var('paged') :
+            (get_query_var('page') ? get_query_var('page') : 1);
 
-        // pagination check
-        // if ($atts['pagination'] == 'true') {
-        // $paged = get_query_var('paged') ? get_query_var('paged') : 1;
-        // $query_args['paged'] = $paged;
-        // }
-
-        // For pages (not the blog index), use 'page' instead of 'paged':
-        if (is_page()) {
-            $paged = (get_query_var('page')) ? get_query_var('page') : 1;
-        } else {
-            $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
-        }
-
-
-        // This block of code creates a new WP_Query to fetch the recent posts based on the provided attributes. It checks if there are any posts returned by the query and generates an unordered list of post titles with links to the respective posts. If no posts are found, it returns a message indicating that no recent posts were found.
+        // Query arguments
         $query_args = array(
             'post_type' => 'post',
             'posts_per_page' => intval($atts['post_per_page']),
             'category_name' => sanitize_text_field($atts['category']),
-            // 'pagination' => filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN),
             'paged' => $paged,
         );
 
         $query = new WP_Query($query_args);
 
+        ob_start(); // Start output buffering
 
-        // Check if the query returned any posts and generate the output accordingly or return a message indicating that no recent posts were found.
         if ($query->have_posts()) {
-            $output = '<ul>';
+            echo '<ul class="recent-posts-list">';
             while ($query->have_posts()) {
                 $query->the_post();
-                $output .= '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
+                echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
             }
-            $output .= '</ul>';
+            echo '</ul>';
+
             // Pagination
-            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
-            //     $big = 999999999; // an unlikely integer
-            //     $output .= '<div class="pagination">';
-            //     $output .= paginate_links(array(
-            //         // 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-            //         'base' => add_query_arg('paged', '%#%'),
-            //         // 'format' => '?paged=%#%',
-            //         'format' => '',
-            //         // 'current' => max(1, get_query_var('paged')),
-            //         'current' => $paged,
-            //         'total' => $query->max_num_pages,
-            //     ));
-            //     $output .= '</div>';
-            // }
+            if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN) && $query->max_num_pages > 1) {
+                echo '<div class="pagination">';
 
-            // // Pagination
-            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
-            //     $output .= '<div class="pagination">';
-            //     $output .= paginate_links(array(
-            //         'base' => add_query_arg('paged', '%#%', get_pagenum_link(1)),
-            //         'format' => '',
-            //         'current' => $paged,
-            //         'total' => $query->max_num_pages,
-            //         'type' => 'plain',
-            //     ));
-            //     $output .= '</div>';
-            // }
+                $big = 999999999; // Need an unlikely integer
 
-            if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
-                $big = 999999999;
-                $output .= '<div class="pagination">';
-                $output .= paginate_links(array(
+                echo paginate_links(array(
                     'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                    'format' => '',
-                    'current' => $paged,
+                    'format' => '?paged=%#%',
+                    'current' => max(1, $paged),
                     'total' => $query->max_num_pages,
+                    'prev_text' => '&laquo; Previous',
+                    'next_text' => 'Next &raquo;',
                     'type' => 'plain',
                 ));
-                $output .= '</div>';
+
+                echo '</div>';
             }
 
-
             wp_reset_postdata();
-            return $output;
         } else {
-            return '<p>No recent posts found.</p>';
+            echo '<p>No recent posts found.</p>';
         }
+
+        return ob_get_clean(); // Return the buffered content
     }
-
-
 }
 
 new ShortcodePlugin();
