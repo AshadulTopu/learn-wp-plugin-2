@@ -30,6 +30,11 @@
 !wp-content/plugins/shortcode-plugin.zip
 
 
+!wp-content/plugins/wp-maintenance-mood
+!wp-content/plugins/wp-maintenance-mood/**
+!wp-content/plugins/wp-maintenance-mood.zip
+
+
 # allow uploads directory
 !wp-content/uploads/
 # Allow specific files in the root directory
