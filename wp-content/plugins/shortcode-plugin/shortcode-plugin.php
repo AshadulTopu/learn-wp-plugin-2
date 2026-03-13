@@ -65,12 +65,14 @@ class ShortcodePlugin
             }
             $output .= '</ul>';
             // Pagination
-            if ($atts['pagination'] == true) {
+            if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN)) {
                 $big = 999999999; // an unlikely integer
                 $output .= '<div class="pagination">';
                 $output .= paginate_links(array(
-                    'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-                    'format' => '?paged=%#%',
+                    // 'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                    'base' => add_query_arg('paged', '%#%'),
+                    // 'format' => '?paged=%#%',
+                    'format' => '',
                     // 'current' => max(1, get_query_var('paged')),
                     'current' => $paged,
                     'total' => $query->max_num_pages,
