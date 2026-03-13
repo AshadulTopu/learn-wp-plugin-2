@@ -27,13 +27,12 @@ class ShortcodePlugin
         $atts = shortcode_atts(array(
             'post_per_page' => 5,
             'category' => '',
-            'pagination' => true,
+            'pagination' => false,
         ), $atts, 'recent_posts');
 
         // Get current page
-        // $paged = get_query_var('paged') ? get_query_var('paged') :
-        //     (get_query_var('page') ? get_query_var('page') : 1);
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+        $paged = get_query_var('paged') ? get_query_var('paged') :
+            (get_query_var('page') ? get_query_var('page') : 1);
 
         // Query arguments
         $query_args = array(
@@ -49,7 +48,6 @@ class ShortcodePlugin
 
         if ($query->have_posts()) {
             echo '<ul class="recent-posts-list">';
-
             while ($query->have_posts()) {
                 $query->the_post();
                 echo '<li><a href="' . get_permalink() . '">' . get_the_title() . '</a></li>';
@@ -57,42 +55,28 @@ class ShortcodePlugin
             echo '</ul>';
 
             // Pagination
-            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN) && $query->max_num_pages > 1) {
-            //     echo '<div class="pagination">';
-
-            //     $big = 999999999; // Need an unlikely integer
-
-            //     echo paginate_links(array(
-            //         'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-            //         'format' => '?paged=%#%',
-            //         'current' => max(1, $paged),
-            //         'total' => $query->max_num_pages,
-            //         'prev_text' => '&laquo; Previous',
-            //         'next_text' => 'Next &raquo;',
-            //         'type' => 'plain',
-            //     ));
-            //     echo '</div>';
-            // }
-
-
-            if ($atts['pagination']) {
-                $pagination_args = array(
-                    'total' => $query->max_num_pages,
-                    'current' => $paged,
-                    'format' => '?paged=%#%',
-                );
-
+            if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN) && $query->max_num_pages > 1) {
                 echo '<div class="pagination">';
-                echo paginate_links($pagination_args);
-                echo '</div>';
 
+                $big = 999999999; // Need an unlikely integer
+
+                echo paginate_links(array(
+                    'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+                    'format' => '?paged=%#%',
+                    'current' => max(1, $paged),
+                    'total' => $query->max_num_pages,
+                    'prev_text' => '&laquo; Previous',
+                    'next_text' => 'Next &raquo;',
+                    'type' => 'plain',
+                ));
+
+                echo '</div>';
             }
 
             wp_reset_postdata();
         } else {
             echo '<p>No recent posts found.</p>';
         }
-
 
         return ob_get_clean(); // Return the buffered content
     }
