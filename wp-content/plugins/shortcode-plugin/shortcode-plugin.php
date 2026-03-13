@@ -31,9 +31,11 @@ class ShortcodePlugin
         ), $atts, 'recent_posts');
 
         // Get current page
-        // $paged = get_query_var('paged') ? get_query_var('paged') :
-        //     (get_query_var('page') ? get_query_var('page') : 1);
-        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
+        if (isset($_GET['rp_paged'])) {
+            $paged = max(1, intval($_GET['rp_paged']));
+        } else {
+            $paged = (get_query_var('paged')) ? get_query_var('paged') : (get_query_var('page') ? get_query_var('page') : 1);
+        }
 
         // Query arguments
         $query_args = array(
@@ -56,30 +58,12 @@ class ShortcodePlugin
             }
             echo '</ul>';
 
-            // Pagination
-            // if (filter_var($atts['pagination'], FILTER_VALIDATE_BOOLEAN) && $query->max_num_pages > 1) {
-            //     echo '<div class="pagination">';
-
-            //     $big = 999999999; // Need an unlikely integer
-
-            //     echo paginate_links(array(
-            //         'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
-            //         'format' => '?paged=%#%',
-            //         'current' => max(1, $paged),
-            //         'total' => $query->max_num_pages,
-            //         'prev_text' => '&laquo; Previous',
-            //         'next_text' => 'Next &raquo;',
-            //         'type' => 'plain',
-            //     ));
-            //     echo '</div>';
-            // }
-
-
             if ($atts['pagination']) {
                 $pagination_args = array(
+                    'base' => add_query_arg('rp_paged', '%#%'),
+                    'format' => '',
+                    'current' => max(1, $paged),
                     'total' => $query->max_num_pages,
-                    'current' => $paged,
-                    'format' => '?paged=%#%',
                 );
 
                 echo '<div class="pagination">';
