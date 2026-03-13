@@ -25,6 +25,11 @@
 !wp-content/plugins/view-count-plugin/**
 !wp-content/plugins/view-count-plugin.zip
 
+!wp-content/plugins/shortcode-plugin
+!wp-content/plugins/shortcode-plugin/**
+!wp-content/plugins/shortcode-plugin.zip
+
+
 # allow uploads directory
 !wp-content/uploads/
 # Allow specific files in the root directory
